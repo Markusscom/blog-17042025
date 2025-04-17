@@ -7,7 +7,6 @@ $password = 'password';
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo "Savienojums izveidots veiksmīgi!";
 } catch (PDOException $e) {
     echo "Savienojuma kļūda: " . $e->getMessage();
 }
@@ -18,5 +17,28 @@ $sql = "SELECT posts.id AS post_id, posts.title, posts.content, comments.id AS c
 
 $stmt = $pdo->query($sql);
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-print_r($rows);
+
+$posts = [];
+
+foreach ($rows as $row) {
+    $post_id = $row['post_id'];
+
+    if (!isset($posts[$post_id])) {
+        $posts[$post_id] = [
+            'id' => $post_id,
+            'title' => $row['title'],
+            'content' => $row['content'],
+            'comments' => []
+        ];
+    }
+
+    if ($row['comment_id']) {
+        $posts[$post_id]['comments'][] = [
+            'id' => $row['comment_id'],
+            'comment_text' => $row['comment_text']
+        ];
+    }
+}
+
+print_r($posts);
 ?>
