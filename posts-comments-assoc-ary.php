@@ -40,5 +40,21 @@ foreach ($rows as $row) {
     }
 }
 
-print_r($posts);
+echo "<ul>";
+foreach ($posts as $post) {
+    echo "<li>";
+    echo "<strong>" . htmlspecialchars($post['title']) . "</strong><br>";
+    echo "<p>" . nl2br(htmlspecialchars($post['content'])) . "</p>";
+
+    if (!empty($post['comments'])) {
+        echo "<ul>";
+        foreach ($post['comments'] as $comment) {
+            echo "<li>" . htmlspecialchars($comment['comment_text']) . "</li>";
+        }
+        echo "</ul>";
+    }
+
+    echo "</li>";
+}
+echo "</ul>";
 ?>
