@@ -4,6 +4,7 @@ $dbname = 'blog_17042025';
 $username = 'bloguser_17042025';
 $password = 'password';
 
+// Pieslēgšanās datubāzei
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -11,9 +12,10 @@ try {
     echo "Savienojuma kļūda: " . $e->getMessage();
 }
 
-$sql = "SELECT posts.id AS post_id, posts.title, posts.content, comments.id AS comment_id, comments.comment_text 
-        FROM posts
-        LEFT JOIN comments ON posts.id = comments.post_id";
+// SQL vaicājums
+$sql = "SELECT p.id AS post_id, p.title, p.content, c.id AS comment_id, c.comment_text 
+        FROM posts p
+        LEFT JOIN comments c ON p.id = c.post_id";
 
 $stmt = $pdo->query($sql);
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
